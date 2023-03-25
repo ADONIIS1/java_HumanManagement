@@ -1,10 +1,12 @@
 package lth.com.hrm.HumanManagement.Service;
 
 import lombok.RequiredArgsConstructor;
+import lth.com.hrm.HumanManagement.Auth.AuthenticationRequest;
 import lth.com.hrm.HumanManagement.Auth.AuthenticationResponse;
 import lth.com.hrm.HumanManagement.Entity.Permission;
 import lth.com.hrm.HumanManagement.Entity.Role;
 import lth.com.hrm.HumanManagement.Entity.User;
+import lth.com.hrm.HumanManagement.Repository.RoleCustomRepo;
 import lth.com.hrm.HumanManagement.Repository.RoleRepository;
 import lth.com.hrm.HumanManagement.Repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +25,7 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    //private final RoleCustomRepo roleCustomRepo;
+    private final RoleCustomRepo roleCustomRepo;
 
 
     private final JwtService jwtService;
