@@ -1,6 +1,17 @@
 package lth.com.hrm.HumanManagement.Service.Salary;
 
 
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lth.com.hrm.HumanManagement.Entity.Salary;
+import lth.com.hrm.HumanManagement.Repository.SalaryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional

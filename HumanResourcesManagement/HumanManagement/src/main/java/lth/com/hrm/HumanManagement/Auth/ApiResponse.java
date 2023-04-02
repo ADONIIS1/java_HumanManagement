@@ -1,3 +1,9 @@
+package lth.com.hrm.HumanManagement.Auth;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -11,7 +17,10 @@ public class ApiResponse {
         this.message = message;
         this.result = result;
     }
-
+    public ApiResponse(int status, Object data) {
+        this.status = status;
+        this.result = data;
+    }
     public ApiResponse(int status, String message){
         this.status = status;
         this.message = message;

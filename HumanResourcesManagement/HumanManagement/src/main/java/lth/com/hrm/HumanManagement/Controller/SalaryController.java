@@ -1,3 +1,10 @@
+import lombok.RequiredArgsConstructor;
+import lth.com.hrm.HumanManagement.Auth.ApiResponse;
+import lth.com.hrm.HumanManagement.Entity.Salary;
+import lth.com.hrm.HumanManagement.Service.Salary.SalaryService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/salary")
 @RequiredArgsConstructor
@@ -35,12 +42,12 @@ public class SalaryController {
     public ResponseEntity<ApiResponse> delete (@RequestBody Long id){
         if(salaryService.getById(id) == null){
             return ResponseEntity.status(404).body(
-                    new ApiResponse("User Not Found")
+                    new ApiResponse(404,"User Not Found")
             );
         }
         salaryService.delete(id);
         return ResponseEntity.status(200).body(
-                new ApiResponse("Delete Success Fully")
+                new ApiResponse(200,"Delete Success Fully")
         );
     }
 }

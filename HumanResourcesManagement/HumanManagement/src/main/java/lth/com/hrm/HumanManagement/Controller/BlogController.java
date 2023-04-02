@@ -1,5 +1,11 @@
 package lth.com.hrm.HumanManagement.Controller;
 
+import lombok.RequiredArgsConstructor;
+import lth.com.hrm.HumanManagement.Auth.ApiResponse;
+import lth.com.hrm.HumanManagement.Entity.Blog;
+import lth.com.hrm.HumanManagement.Service.Blog.BlogService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/blog")
 @RequiredArgsConstructor
@@ -8,9 +14,10 @@ public class BlogController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getById/{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> getById (@PathVariable Long id){
         return ResponseEntity.status(200).body(
-                new ApiResponse(201, blogService.getById(id)));
+                new ApiResponse(201,"get Success",blogService.getById(id))
+        );
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -44,10 +51,10 @@ public class BlogController {
     public ResponseEntity<ApiResponse> delete(@RequestBody Long id) {
         if (blogService.getById(id) == null) {
             return ResponseEntity.status(404).body(
-                    new ApiResponse("User Not Found"));
+                    new ApiResponse(404,"User Not Found"));
         }
         blogService.delete(id);
         return ResponseEntity.status(200).body(
-                new ApiResponse("Delete Success Fully"));
+                new ApiResponse(404,"Delete Success Fully"));
     }
 }

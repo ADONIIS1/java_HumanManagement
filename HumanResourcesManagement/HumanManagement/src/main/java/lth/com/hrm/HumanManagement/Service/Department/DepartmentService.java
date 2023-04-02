@@ -1,5 +1,9 @@
 package lth.com.hrm.HumanManagement.Service.Department;
 
+import lth.com.hrm.HumanManagement.Entity.Department;
+
+import java.util.List;
+
 public interface DepartmentService {
     List<Department> getAll ();
 
