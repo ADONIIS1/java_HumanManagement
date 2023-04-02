@@ -1,5 +1,9 @@
 package lth.com.hrm.HumanManagement.Service.Salary;
 
+import lth.com.hrm.HumanManagement.Entity.Salary;
+
+import java.util.List;
+
 public interface SalaryService {
     List<Salary> getAll ();
 

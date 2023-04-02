@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,26 +23,44 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String full_name;
-    private String user_name;
+    @Column(columnDefinition = "nvarchar")
+    private String fullName;
+    private String userName;
     private String password;
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_role",
             joinColumns = @JoinColumn(name = "Users_ID"),
             inverseJoinColumns = @JoinColumn(name = "Roles_ID")
     )
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "salary_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Salary salary ;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "degree_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Degree degree ;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "department_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Department department ;
     public User(Long id, String fullname, String userName, String password, String email, Set<Role> roles) {
         this.id = id;
-        this.full_name = fullname;
-        this.user_name = userName;
+        this.fullName = fullname;
+        this.userName = userName;
         this.password = password;
         this.email = email;
         this.roles = roles;
     }
+
+    @Transient
+    public String RoleName;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

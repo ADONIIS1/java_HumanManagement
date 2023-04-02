@@ -1,4 +1,4 @@
-package lth.com.hrm.HumanManagement.Service;
+package lth.com.hrm.HumanManagement.Service.Auth;
 
 import lombok.RequiredArgsConstructor;
 import lth.com.hrm.HumanManagement.Auth.AuthenticationRequest;

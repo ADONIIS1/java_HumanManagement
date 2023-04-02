@@ -1,5 +1,12 @@
 package lth.com.hrm.HumanManagement.Controller;
 
+import lombok.RequiredArgsConstructor;
+import lth.com.hrm.HumanManagement.Auth.ApiResponse;
+import lth.com.hrm.HumanManagement.Entity.Degree;
+import lth.com.hrm.HumanManagement.Service.Degree.DegreeService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/degree")
@@ -37,10 +44,10 @@ public class DegreeController {
     public ResponseEntity<ApiResponse> delete(@RequestBody Long id) {
         if (degreeService.getById(id) == null) {
             return ResponseEntity.status(404).body(
-                    new ApiResponse("User Not Found"));
+                    new ApiResponse(404,"User Not Found"));
         }
         degreeService.delete(id);
         return ResponseEntity.status(200).body(
-                new ApiResponse("Delete Success Fully"));
+                new ApiResponse(200,"Delete Success Fully"));
     }
 }
