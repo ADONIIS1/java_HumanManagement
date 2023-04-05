@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
     @Autowired
     PermissionRepository permissionRepository;
+    @Autowired
     RoleCustomRepo roleCustomRepo;
     @Override
     public List<Role> getAll() {
@@ -33,16 +34,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role create(Role role) {
         role.setName(role.getName().toUpperCase());
-        List<Permission> permissions = Arrays.asList(
-                new Permission(role.getName()),
-                new Permission(role.getName() + ".VIEW"),
-                new Permission(role.getName() + ".CREATE"),
-                new Permission(role.getName() + ".UPDATE"),
-                new Permission(role.getName() + ".DELETE")
-        );
+//        List<Permission> permissions = Arrays.asList(
+//                new Permission(role.getName()),
+//                new Permission(role.getName() + ".VIEW"),
+//                new Permission(role.getName() + ".CREATE"),
+//                new Permission(role.getName() + ".UPDATE"),
+//                new Permission(role.getName() + ".DELETE")
+//        );
         //permissions.stream().filter(p -> p.getName().equals());
         var roleCreate = roleRepository.save(role);
-        permissionRepository.saveAll(permissions);
+//        permissionRepository.saveAll(permissions);
         return roleCreate;
     }
 
@@ -72,8 +73,10 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return null;
         }
-        roleCustomRepo.deleteRoles(roleId); // Delete List<Permission> in Role
-        role.getPermissions().addAll(permissions); // Add List <Permission> to Role
+        roleCustomRepo.deletePemission(roleId);
+        permissions.stream().forEach(p -> {
+            role.getPermissions().add(p);
+        });
         return this.getById(roleId);
     }
 

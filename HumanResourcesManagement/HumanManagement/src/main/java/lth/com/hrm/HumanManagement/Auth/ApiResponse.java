@@ -1,8 +1,8 @@
 package lth.com.hrm.HumanManagement.Auth;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -10,20 +10,25 @@ import lombok.NoArgsConstructor;
 public class ApiResponse {
     private int status;
     private String message;
-    private Object result;
+    private Object data;
 
-    public ApiResponse(int status, String message, Object result){
+    public ApiResponse(int status, String message, Object data){
         this.status = status;
         this.message = message;
-        this.result = result;
+        this.data = data;
     }
-    public ApiResponse(int status, Object data) {
-        this.status = status;
-        this.result = data;
-    }
+
     public ApiResponse(int status, String message){
         this.status = status;
         this.message = message;
+    }
+    public ApiResponse(String message){
+        this.message = message;
+    }
+
+    public ApiResponse(int status, Object data) {
+        this.status = status;
+        this.data = data;
     }
 
     public int getStatus() {
@@ -42,12 +47,12 @@ public class ApiResponse {
         this.message = message;
     }
 
-    public Object getResult() {
-        return result;
+    public Object getData() {
+        return data;
     }
 
-    public void setResult(Object result) {
-        this.result = result;
+    public void setData(Object data) {
+        this.data = data;
     }
 
     @Override

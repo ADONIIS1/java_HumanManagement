@@ -43,11 +43,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long update(User user) {
+    public User update(User user) {
         var checkUser = getById(user.getId());
         if (checkUser != null) {
-            userRepository.save(user);
-            return user.getId();
+            return userRepository.save(user);
         }
         return null;
     }
@@ -89,7 +88,9 @@ public class UserServiceImpl implements UserService {
         }
         System.out.println("Check roles " + roles);
         roleCustomRepo.deleteRoles(userId);
-        user.getRoles().addAll((roles));
+        roles.stream().forEach(p -> {
+            user.getRoles().add(p);
+        });
         return this.getById(userId);
     }
 
@@ -97,6 +98,19 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByFullNameOrEmail(String fullName,String Email) {
         return userRepository.findByFullNameContainingOrEmailContaining
                 (fullName,Email);
+    }
+    @Override
+    public User findByPhone(String Phone) {
+        if(userRepository.findByPhone(Phone).get() != null)
+            return userRepository.findByPhone(Phone).get();
+        return null;
+    }
+
+    @Override
+    public User findByName(String Email) {
+        if(userRepository.findByEmail(Email).get() != null)
+            return userRepository.findByEmail(Email).get();
+        return null;
     }
 
     @Override
@@ -115,5 +129,4 @@ public class UserServiceImpl implements UserService {
     public void DeleteRoleByUser(Long id) {
         roleCustomRepo.deleteRoles(id);
     }*/
-
 }

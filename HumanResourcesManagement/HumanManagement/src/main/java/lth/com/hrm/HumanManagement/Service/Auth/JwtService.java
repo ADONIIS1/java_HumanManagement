@@ -21,7 +21,8 @@ public class JwtService {
 
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 1000)) // 50 *60 *1000
+                .withClaim("id",user.getId())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 50 *60 *100000)) // 30 *1000
                 .withClaim("roles",authorities.stream().map(GrantedAuthority :: getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
@@ -30,8 +31,9 @@ public class JwtService {
 
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 70 *60 *1000))
-                //.withClaim("roles",authorities.stream().map(GrantedAuthority :: getAuthority).collect(Collectors.toList()))
+                .withClaim("id",user.getId())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 50 *60 *100000)) // 30 *1000
+                .withClaim("roles",authorities.stream().map(GrantedAuthority :: getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
 }

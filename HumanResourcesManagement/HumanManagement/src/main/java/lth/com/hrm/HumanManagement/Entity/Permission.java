@@ -23,6 +23,8 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String display;
+
     @ManyToMany(mappedBy = "permissions")
     @Fetch(value = FetchMode.SELECT)
     @JsonIgnore

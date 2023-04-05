@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,13 +34,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/login")
+                .requestMatchers("/auth/login")
+                .permitAll()// Accept all Roles
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/auth/refreshtoken")
                 .permitAll()// Accept all Roles
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/demo/**")
-                .authenticated() // Required Authenticate
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/user/**")
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/role/**")
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/blog/**")
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/degree/**")
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/department/**")
+                .authenticated()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/salary/**")
+                .authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())

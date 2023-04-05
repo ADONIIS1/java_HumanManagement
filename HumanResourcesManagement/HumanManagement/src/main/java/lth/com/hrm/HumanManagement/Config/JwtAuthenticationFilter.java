@@ -33,38 +33,50 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            try {
-                String token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256(Secret_key.getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
-                String UserName = decodedJWT.getSubject();
-                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                Arrays.stream(roles).forEach(role -> {
-                    authorities.add(new SimpleGrantedAuthority(role));
-                });
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        UserName, null, authorities);
-
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
-                filterChain.doFilter(request, response);
-            } catch (Exception exception) {
-                response.setHeader("error", exception.getMessage());
-                response.setStatus(UNAUTHORIZED.value());
-                Map<String, String> error = new HashMap<>();
-
-                error.put("message", "Token đã hết hạn sử dụng");
-                error.put("status", "401");
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-
-            }
-        } else {
+        if (request.getServletPath().equals("/auth/login") || request.getServletPath().equals("/auth/refreshtoken")) {
             filterChain.doFilter(request, response);
+        }
+        else{
+            HttpServletResponse res = (HttpServletResponse) response;
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+            res.setHeader("Access-Control-Max-Age", "3600");
+            res.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization, Origin, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            if (authorizationHeader != null || authorizationHeader.startsWith("Bearer ")) {
+                try {
+                    String token = authorizationHeader.substring("Bearer ".length());
+                    Algorithm algorithm = Algorithm.HMAC256(Secret_key.getBytes());
+                    JWTVerifier verifier = JWT.require(algorithm).build();
+                    DecodedJWT decodedJWT = verifier.verify(token);
+                    String UserName = decodedJWT.getSubject();
+                    String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+                    Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                    Arrays.stream(roles).forEach(role -> {
+                        authorities.add(new SimpleGrantedAuthority(role));
+                    });
+                    UsernamePasswordAuthenticationToken
+                            usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(UserName, null, authorities);
+
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+                    filterChain.doFilter(request, response);
+                } catch (Exception exception) {
+                    response.setHeader("error", exception.getMessage());
+                    response.setStatus(UNAUTHORIZED.value());
+                    Map<String, String> error = new HashMap<>();
+
+                    error.put("message", "Token đã hết hạn sử dụng");
+                    error.put("status", "401");
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    new ObjectMapper().writeValue(response.getOutputStream(), error);
+                }
+            }
+            else {
+                filterChain.doFilter(request, response);
+            }
         }
     }
 }
